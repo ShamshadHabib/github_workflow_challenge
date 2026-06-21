@@ -1,0 +1,13 @@
+name: issue tracker workflow
+
+on: 
+  issues: 
+    types: [opened, edited, closed]
+jobs:
+  issueReport:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code repo
+        uses: actions/checkout@v7
+      - name: get issue report
+        run: echo "${{toJson(github)}}"
