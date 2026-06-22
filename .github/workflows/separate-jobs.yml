@@ -19,8 +19,36 @@ jobs:
           echo "Running lint"
           npm run lint
           echo "test done"
-  test:
+  build:
     needs: lint
+    outputs:
+      script-filename: ${{steps.filename.outputs.script-file}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: build dependencies
+        run: npm ci
+      - name: build
+        run: |
+          echo "Running build"
+          npm run build
+          echo "build is done"
+      - name: publish file name
+        id: filename
+        run: find dist/assets/*.js -type f -execdir echo script-file{}' >> $GITHUB_OUTPUT ';'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          path: |
+            dist 
+
+  test:
+    needs: [lint,build]
     runs-on: ubuntu-latest 
     steps:
       - name: checkout
@@ -36,6 +64,8 @@ jobs:
           echo "Running lint"
           npm run lint
           echo "test done"
+          echo "${{needs.build.outputs.script-filename}}"
+          
   deploy:
     runs-on: ubuntu-latest
     needs: [lint,test]
