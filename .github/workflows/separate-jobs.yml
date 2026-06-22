@@ -1,0 +1,52 @@
+name: first workflow
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: build dependencies
+        run: npm ci
+      - name: lint
+        run: |
+          echo "Running lint"
+          npm run lint
+          echo "test done"
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: build dependencies
+        run: npm ci
+      - name: test
+        run: |
+          echo "Running lint"
+          npm run lint
+          echo "test done"
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: build dependencies
+        run: npm ci
+      - name: deploy
+        run: |
+          npm run build
+          echo 'Deployed'
