@@ -20,7 +20,8 @@ jobs:
           npm run lint
           echo "test done"
   test:
-    runs-on: ubuntu-latest
+    needs: lint
+    runs-on: ubuntu-latest 
     steps:
       - name: checkout
         uses: actions/checkout@v7
@@ -37,6 +38,7 @@ jobs:
           echo "test done"
   deploy:
     runs-on: ubuntu-latest
+    needs: [lint,test]
     steps:
       - name: checkout
         uses: actions/checkout@v7
