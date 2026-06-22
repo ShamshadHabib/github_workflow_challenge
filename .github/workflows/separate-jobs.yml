@@ -40,7 +40,7 @@ jobs:
           echo "build is done"
       - name: publish file name
         id: filename
-        run: find dist/assets/*.js -type f -execdir echo script-file{}' >> $GITHUB_OUTPUT ';'
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
